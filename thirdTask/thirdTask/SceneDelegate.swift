@@ -1,6 +1,6 @@
 //
 //  SceneDelegate.swift
-//  thirdTask
+//  ColorsDescription
 //
 //  Created by fts on 09/09/2024.
 //
