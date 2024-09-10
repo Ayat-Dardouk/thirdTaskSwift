@@ -1,12 +1,11 @@
 import UIKit
 
-class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+class ViewController :  UIViewController ,  UITableViewDataSource,  UITableViewDelegate {
     
-    @IBOutlet var textDescription: UITextView!
-    @IBOutlet var colorsTable: UITableView!
+    @IBOutlet var textDescription :  UITextView!
+    @IBOutlet var colorsTable :  UITableView!
     
-    // Define an array of colors and their corresponding names
-    let colors: [(UIColor, String)] = [
+    let colors :  [(UIColor, String)] = [
         (.red, "Red"),
         (.orange, "Orange"),
         (.yellow, "Yellow"),
@@ -24,34 +23,26 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // Set the delegate and data source of the table view
         colorsTable.delegate = self
         colorsTable.dataSource = self
-        
-        // Register a basic cell type
-        colorsTable.register(UITableViewCell.self, forCellReuseIdentifier: "colorCell")
+        colorsTable.register(UITableViewCell.self, forCellReuseIdentifier :  "colorCell")
             }
     
-    // MARK: - UITableViewDataSource Methods
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView :  UITableView, numberOfRowsInSection section :  Int) -> Int {
         return colors.count
     }
     
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "colorCell", for: indexPath)
+    func tableView(_ tableView :  UITableView, cellForRowAt indexPath :  IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier :  "colorCell", for :  indexPath)
         
-        // Get the color and name for the current row
         let (color, name) = colors[indexPath.row]
         
-        // Set the cell's background color
         cell.backgroundColor = color
         cell.textLabel?.text = name
         
-        // Set the text color based on the name
         if name == "Black" {
             cell.textLabel?.textColor = .white
-        }  
+        }
         if name != "Black" {
             cell.textLabel?.textColor = .black
         }
@@ -61,17 +52,14 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         return cell
     }
     
-    // Optional: Set the height for each row
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath :  IndexPath) -> CGFloat {
         return 50
     }
     
-    // MARK: - UITableViewDelegate Methods
     
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    func tableView(_ tableView :  UITableView, didSelectRowAt indexPath :  IndexPath) {
         let (selectedColor, colorName) = colors[indexPath.row]
         
-        // Update the text description based on the selected color
         switch indexPath.row {
         case 0:
             textDescription.text = "You selected Red.\n\nA bold and vibrant color often associated with passion, energy, and danger."
@@ -102,10 +90,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             textDescription.text = "Color not recognized."
         }
         
-        // Optionally, set the background color of the text view to the selected color
         textDescription.backgroundColor = selectedColor
         
-        // Set the text color to default (black) if not black
         if selectedColor != .black {
             textDescription.textColor = .black
         }
