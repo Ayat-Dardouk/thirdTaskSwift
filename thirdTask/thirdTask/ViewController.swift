@@ -1,11 +1,12 @@
 import UIKit
 
-class ViewController :  UIViewController ,  UITableViewDataSource,  UITableViewDelegate {
+class ViewController:  UIViewController,  UITableViewDataSource,  UITableViewDelegate {
     
-    @IBOutlet var textDescription :  UITextView!
-    @IBOutlet var colorsTable :  UITableView!
-    
-    let colors :  [(UIColor, String)] = [
+    @IBOutlet var textDescription:  UITextView!
+    @IBOutlet var colorsTable:  UITableView!
+    @IBOutlet var navigationTitle:  UINavigationItem!
+    @IBOutlet var navBar:  UINavigationBar!
+    let colors:  [(UIColor, String)] = [
         (.red, "Red"),
         (.orange, "Orange"),
         (.yellow, "Yellow"),
@@ -25,15 +26,57 @@ class ViewController :  UIViewController ,  UITableViewDataSource,  UITableViewD
         
         colorsTable.delegate = self
         colorsTable.dataSource = self
-        colorsTable.register(UITableViewCell.self, forCellReuseIdentifier :  "colorCell")
-            }
+        colorsTable.register(UITableViewCell.self, forCellReuseIdentifier:  colorCell)
+        
+        setupConstraints()
+        
+    }
     
-    func tableView(_ tableView :  UITableView, numberOfRowsInSection section :  Int) -> Int {
+    override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+        adjustLayoutForOrientation()
+    }
+    
+    func setupConstraints() {
+        colorsTable.translatesAutoresizingMaskIntoConstraints = false
+        textDescription.translatesAutoresizingMaskIntoConstraints = false
+
+        let constraintsLandscape = [
+            colorsTable.topAnchor.constraint(equalTo: view.topAnchor),
+            colorsTable.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            colorsTable.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.4),
+            colorsTable.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            
+            textDescription.topAnchor.constraint(equalTo: view.topAnchor),
+            textDescription.leadingAnchor.constraint(equalTo: colorsTable.leadingAnchor),
+            textDescription.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            textDescription.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+            
+        ]
+        
+        self.landscapeConstraints = constraintsLandscape
+    }
+    
+    func adjustLayoutForOrientation() {
+        if UIDevice.current.orientation.isLandscape {
+            NSLayoutConstraint.activate(landscapeConstraints)
+            navigationTitle.title = ""
+            
+        } else {
+            NSLayoutConstraint.deactivate(landscapeConstraints)
+            navigationTitle.title = "Colors"
+            
+        }
+    }
+    
+    var landscapeConstraints:  [NSLayoutConstraint] = []
+    
+    func tableView(_ tableView:  UITableView,  numberOfRowsInSection section: Int) -> Int {
         return colors.count
     }
     
-    func tableView(_ tableView :  UITableView, cellForRowAt indexPath :  IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier :  "colorCell", for :  indexPath)
+    func tableView(_ tableView:  UITableView,  cellForRowAt indexPath:  IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier:  colorCell, for:  indexPath)
         
         let (color, name) = colors[indexPath.row]
         
@@ -42,22 +85,20 @@ class ViewController :  UIViewController ,  UITableViewDataSource,  UITableViewD
         
         if name == "Black" {
             cell.textLabel?.textColor = .white
-        }
-        if name != "Black" {
+        } else {
             cell.textLabel?.textColor = .black
         }
         
         cell.selectionStyle = .none
-
+        
         return cell
     }
     
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath :  IndexPath) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 50
     }
     
-    
-    func tableView(_ tableView :  UITableView, didSelectRowAt indexPath :  IndexPath) {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let (selectedColor, colorName) = colors[indexPath.row]
         
         switch indexPath.row {
